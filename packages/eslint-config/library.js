@@ -4,8 +4,14 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["eslint:recommended", "prettier", "eslint-config-turbo"],
-  plugins: ["only-warn"],
+  extends: [
+    require.resolve('@vercel/style-guide/eslint/node'),
+    require.resolve('@vercel/style-guide/eslint/typescript'),
+    "eslint:recommended", 
+    "eslint-config-turbo",
+    "plugin:prettier/recommended",
+  ],
+  plugins: ["only-warn", "prettier"],
   globals: {
     React: true,
     JSX: true,
@@ -31,4 +37,18 @@ module.exports = {
       files: ["*.js?(x)", "*.ts?(x)"],
     },
   ],
+  rules: {
+    "prettier/prettier": ["error", {
+      useTabs: false,
+      tabWidth: 2,
+      singleQuote: true,
+      trailingComma: "all",
+      semi: false,
+      arrowParens: "always",
+      bracketSpacing: true,
+      endOfLine: "lf",
+      printWidth: 80
+     }      
+    ],
+  }
 };
