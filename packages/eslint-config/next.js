@@ -42,6 +42,7 @@ module.exports = {
         unnamedComponents: "arrow-function",
       },
     ],
+    "semi": ["error", "never"],
     "import/no-default-export": "off",
     "prettier/prettier": ["error", {
       useTabs: false,
