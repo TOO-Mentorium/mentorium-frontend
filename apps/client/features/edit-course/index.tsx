@@ -27,7 +27,7 @@ import { SimpleTextEditor } from '../../components/simple-text-editor'
 import type { Course } from '../../entities/course'
 import classNames from './index.module.css'
 
-export const CreateCourse = () => {
+export const EditCourse = ({ course }: { course: Course }) => {
   const router = useRouter()
 
   const [submitting, setSubmitting] = useState(false)
@@ -35,12 +35,12 @@ export const CreateCourse = () => {
 
   const form = useForm({
     initialValues: {
-      name: '',
-      slug: '',
-      imageUrl: '',
-      description: '',
-      whatWillLearn: '{}',
-      prerequisites: '{}',
+      name: course.name,
+      slug: course.slug,
+      imageUrl: course.imageUrl,
+      description: course.description,
+      whatWillLearn: course.whatWillLearn,
+      prerequisites: course.prerequisites,
     },
 
     validate: {
@@ -104,9 +104,9 @@ export const CreateCourse = () => {
     setSubmitting(true)
 
     const response = await fetch('https://localhost:3000/api/courses', {
-      method: 'POST',
+      method: 'PUT',
       credentials: 'include',
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, uid: course.uid }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -134,8 +134,8 @@ export const CreateCourse = () => {
 
     if (data.success) {
       notifications.show({
-        title: 'Course created',
-        message: 'Course has been successfully created.',
+        title: 'Course edited',
+        message: 'Course has been successfully edited.',
         color: 'blue',
         autoClose: 5000,
         icon: <IconExclamationMark size="20px" />,
@@ -160,8 +160,6 @@ export const CreateCourse = () => {
     const formData = new FormData()
 
     formData.append('file', files[0] as Blob)
-
-    console.log(formData.get('file'))
 
     const response = await fetch('https://localhost:3000/api/storage/upload', {
       method: 'POST',
@@ -197,7 +195,7 @@ export const CreateCourse = () => {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} style={{ marginTop: 50 }}>
+    <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: '100%' }}>
       <Stack align="flex-end" gap="lg" w="100%">
         <Stack gap="xs" w="100%">
           <TextInput
@@ -305,7 +303,7 @@ export const CreateCourse = () => {
           />
         </InputWrapper>
         <Button loading={submitting} size="lg" type="submit">
-          Create
+          Edit
         </Button>
       </Stack>
     </form>

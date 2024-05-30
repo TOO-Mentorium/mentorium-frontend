@@ -17,7 +17,7 @@ const InteractiveComponent = (props: Props) => {
   const {
     interactiveComponents,
     setInteractiveComponents,
-    inConstructor,
+    mode,
     openConstructor,
   } = useContext(AdvancedEditorContext)
 
@@ -44,10 +44,9 @@ const InteractiveComponent = (props: Props) => {
       <NodeViewWrapper>
         <MultipleChoice
           component={component}
+          mode={mode}
           onEdit={handleEdit}
-          onInteractionStateUpdate={
-            !inConstructor ? handleInteractionStateUpdate : undefined
-          }
+          onInteractionStateUpdate={handleInteractionStateUpdate}
         />
       </NodeViewWrapper>
     )
@@ -70,10 +69,9 @@ const InteractiveComponent = (props: Props) => {
       <NodeViewWrapper>
         <Task
           component={component}
+          mode={mode}
           onEdit={handleEdit}
-          onInteractionStateUpdate={
-            !inConstructor ? handleInteractionStateUpdate : undefined
-          }
+          onInteractionStateUpdate={handleInteractionStateUpdate}
         />
       </NodeViewWrapper>
     )

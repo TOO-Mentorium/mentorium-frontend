@@ -14,6 +14,7 @@ import type { TaskComponent, TaskInteractionState } from '../../../types'
 
 interface Props {
   component: TaskComponent
+  mode: 'edit' | 'preview' | 'view'
   onInteractionStateUpdate?: (
     updatedInteractionState: TaskInteractionState,
   ) => void
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export const Task = ({
+  mode,
   component,
   onInteractionStateUpdate,
   onEdit,
@@ -51,6 +53,33 @@ export const Task = ({
 
   const handleEdit = () => {
     onEdit?.(component)
+  }
+
+  const renderActions = () => {
+    if (mode === 'view') {
+      return null
+    }
+
+    if (mode === 'preview') {
+      return (
+        <Group>
+          <Button onClick={handleReset} size="xs" variant="default">
+            Reset
+          </Button>
+          <Button onClick={handleEdit} size="xs" variant="outline">
+            Edit
+          </Button>
+        </Group>
+      )
+    }
+
+    return (
+      <Group>
+        <Button onClick={handleReset} size="xs" variant="default">
+          Reset
+        </Button>
+      </Group>
+    )
   }
 
   return (
@@ -91,16 +120,7 @@ export const Task = ({
           />
         </Stack>
         <Group justify="flex-start" w="100%">
-          {!onInteractionStateUpdate ? (
-            <Button onClick={handleReset} size="xs" variant="default">
-              Reset
-            </Button>
-          ) : null}
-          {onEdit ? (
-            <Button onClick={handleEdit} size="xs" variant="outline">
-              Edit
-            </Button>
-          ) : null}
+          {renderActions()}
         </Group>
       </Stack>
     </Paper>

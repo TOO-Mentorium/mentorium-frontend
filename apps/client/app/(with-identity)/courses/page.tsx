@@ -34,8 +34,6 @@ const getCourses = async (
     },
   )
 
-  console.log(response.url, 123)
-
   if (!response.ok) {
     const error = await response.json()
 
@@ -48,7 +46,7 @@ const getCourses = async (
 
   const { data, total } = await response.json()
 
-  console.log(data)
+  console.log(data, response.url)
 
   return { courses: data, total } as {
     courses: CourseSimplified[]

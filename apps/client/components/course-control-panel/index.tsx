@@ -11,6 +11,7 @@ import {
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { revalidateTag } from 'next/cache'
+import NextLink from 'next/link'
 import type { Course } from '../../entities/course'
 
 export const CourseControlPanel = ({ course }: { course: Course }) => {
@@ -18,8 +19,6 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
 
   const [publishing, setPublishing] = useState(false)
   const [deleting, setDeleting] = useState(false)
-
-  console.log(course)
 
   const handleDeleteClick = async () => {
     setDeleting(true)
@@ -132,13 +131,15 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
         Publish
       </Button>
       <Button
-        leftSection={<IconEdit size="23px" />}
+        component={NextLink}
+        href={`/studio/edit-course/${course.uid}`}
+        leftSection={<IconEdit />}
         size="md"
         style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)' }}
       >
         Edit
       </Button>
-      {/* <Button
+      <Button
         color="red.8"
         leftSection={<IconTrash size="23px" />}
         loading={deleting}
@@ -147,7 +148,7 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
         style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)' }}
       >
         Delete
-      </Button> */}
+      </Button>
     </Group>
   )
 }

@@ -35,7 +35,7 @@ export const CourseCard = ({ course, withAuthor = true, href }: Props) => {
           alt={course.name}
           component={NextImage}
           height={200}
-          src="https://res.cloudinary.com/apollographql/image/upload/v1702931345/odyssey/course-assets-new-brand/shuttle_beige_w7scal.svg"
+          src={course.imageUrl}
           width={300}
         />
       </CardSection>

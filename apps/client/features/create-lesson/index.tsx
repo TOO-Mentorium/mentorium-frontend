@@ -1,40 +1,26 @@
 'use client'
 
-import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import {
   Button,
-  FileButton,
   InputWrapper,
   Stack,
-  Text,
   TextInput,
-  Image,
-  Textarea,
   Group,
-  Box,
-  rgba,
-  Title,
   NumberInput,
 } from '@mantine/core'
-import { stringToSlug } from '@repo/libs/string'
 import { useForm } from '@mantine/form'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
-import { IconExclamationMark, IconX } from '@tabler/icons-react'
-import NextImage from 'next/image'
-import { SimpleTextEditor } from '../../components/simple-text-editor'
-import type { Course } from '../../entities/course'
+import { IconExclamationMark } from '@tabler/icons-react'
 import type { Lesson } from '../../entities/lesson/types'
 import { AdvancedEditor } from '../../components/advanced-editor'
-import classNames from './index.module.css'
 
 export const CreateLesson = ({ courseId }: { courseId: string }) => {
   const router = useRouter()
 
   const [submitting, setSubmitting] = useState(false)
-  const [imageUploading, setImageUploading] = useState(false)
 
   const form = useForm({
     initialValues: {
@@ -85,40 +71,45 @@ export const CreateLesson = ({ courseId }: { courseId: string }) => {
   }) => {
     setSubmitting(true)
 
-    console.log(values)
+    const response = await fetch('https://localhost:3000/api/lessons', {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({ ...values, courseUid: courseId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-    // const response = await fetch('https://localhost:3000/api/courses/lessons', {
-    //   method: 'POST',
-    //   credentials: 'include',
-    //   body: JSON.stringify({ ...values, courseId }),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
+    const data = (await response.json()) as {
+      success: boolean
+      lesson: Lesson
+      error?: {
+        message: string
+        code: number
+      }
+    }
 
-    // const data = (await response.json()) as {
-    //   success: boolean
-    //   lesson: Lesson
-    //   error?: {
-    //     message: string
-    //     code: number
-    //   }
-    // }
+    if (!data.success) {
+      notifications.show({
+        title: 'Server error',
+        message:
+          'An unexpected error occurred while creating the lesson. Please try again later.',
+        color: 'red',
+        autoClose: 5000,
+        icon: <IconExclamationMark size="20px" />,
+      })
+    }
 
-    // if (!data.success) {
-    //   notifications.show({
-    //     title: 'Server error',
-    //     message:
-    //       'An unexpected error occurred while creating the course. Please try again later.',
-    //     color: 'red',
-    //     autoClose: 5000,
-    //     icon: <IconExclamationMark size="20px" />,
-    //   })
-    // }
+    if (data.success) {
+      notifications.show({
+        title: 'Lesson created',
+        message: 'Lesson has been successfully created.',
+        color: 'blue',
+        autoClose: 5000,
+      })
 
-    // if (data.success) {
-    //   router.push(`/studio/courses/${courseId}/lessons/${data.lesson.uid}`)
-    // }
+      router.push(`/studio/courses/${courseId}/lessons/${data.lesson.uid}`)
+    }
 
     setSubmitting(false)
   }
@@ -156,6 +147,7 @@ export const CreateLesson = ({ courseId }: { courseId: string }) => {
         >
           <AdvancedEditor
             error={Boolean(form.errors.content)}
+            mode="preview"
             onChange={({ content, interactiveComponents }) => {
               form.setFieldValue('content', content)
               form.setFieldValue('interactiveComponents', interactiveComponents)

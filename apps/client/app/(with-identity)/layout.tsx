@@ -55,7 +55,7 @@ const WithIdentityLayout = async ({ children }: Props) => {
         justify="space-between"
         p="md"
         pos="sticky"
-        style={{ zIndex: 1000, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
+        style={{ zIndex: 50, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
         top="0px"
       >
         <Group gap="30px">

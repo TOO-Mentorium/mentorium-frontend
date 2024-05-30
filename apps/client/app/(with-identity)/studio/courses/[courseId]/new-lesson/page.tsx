@@ -1,8 +1,8 @@
 import { Container, Group, NavLink, Stack, Title } from '@mantine/core'
 import NextLink from 'next/link'
 import { redirect } from 'next/navigation'
-import { CreateLesson } from '../../../../../../../features/create-lesson'
-import { BackButton } from '../../../../../../../components'
+import { CreateLesson } from '../../../../../../features/create-lesson'
+import { BackButton } from '../../../../../../components'
 import classNames from './page.module.css'
 
 export const metadata = {

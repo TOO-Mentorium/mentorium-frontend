@@ -40,7 +40,7 @@ export const TaskCostructor = ({ component, onUpdate }: Props) => {
         </Stack>
       </Stack>
       <Divider />
-      <Task component={component} />
+      <Task component={component} mode="edit" />
     </Stack>
   )
 }

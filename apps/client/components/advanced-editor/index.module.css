@@ -4,4 +4,9 @@
     &[data-error="true"] {
        border: 1px solid var(--mantine-color-error);
     }
+
+    &[data-editable="false"] {
+        border: none;
+        background: none;
+    }
 }

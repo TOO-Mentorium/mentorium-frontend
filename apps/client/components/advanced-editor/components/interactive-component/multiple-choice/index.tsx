@@ -18,6 +18,7 @@ import type {
 } from '../../../types'
 
 interface Props {
+  mode: 'view' | 'preview' | 'edit'
   component: MultipleChoiceComponent
   onInteractionStateUpdate?: (
     updatedInteractionState: MultipleChoiceInteractionState,
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export const MultipleChoice = ({
+  mode,
   component,
   onInteractionStateUpdate,
   onEdit,
@@ -101,6 +103,33 @@ export const MultipleChoice = ({
     onEdit?.(component)
   }
 
+  const renderActions = () => {
+    if (mode === 'view') {
+      return null
+    }
+
+    if (mode === 'preview') {
+      return (
+        <Group>
+          <Button onClick={handleReset} size="xs" variant="default">
+            Reset
+          </Button>
+          <Button onClick={handleEdit} size="xs" variant="outline">
+            Edit
+          </Button>
+        </Group>
+      )
+    }
+
+    return (
+      <Group>
+        <Button onClick={handleReset} size="xs" variant="default">
+          Reset
+        </Button>
+      </Group>
+    )
+  }
+
   return (
     <Paper bg="dark.6">
       <Stack align="flex-end" gap="sm" p="sm">
@@ -165,18 +194,7 @@ export const MultipleChoice = ({
           />
         ) : null}
         <Group justify="space-between" w="100%">
-          <Group>
-            {!onInteractionStateUpdate ? (
-              <Button onClick={handleReset} size="xs" variant="default">
-                Reset
-              </Button>
-            ) : null}
-            {onEdit ? (
-              <Button onClick={handleEdit} size="xs" variant="outline">
-                Edit
-              </Button>
-            ) : null}
-          </Group>
+          {renderActions()}
           <Button onClick={handleSubmit} size="xs" variant="light">
             Submit
           </Button>

@@ -1,4 +1,6 @@
-import { useEditor } from '@tiptap/react'
+'use client'
+
+import { generateHTML, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React, { useEffect, useState } from 'react'
 import Image from '@tiptap/extension-image'
@@ -11,7 +13,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { v4 as uuidv4 } from 'uuid'
 import ts from 'highlight.js/lib/languages/typescript'
 import js from 'highlight.js/lib/languages/javascript'
-import type { Editor } from '@tiptap/core'
+import type { Editor, Extension, JSONContent } from '@tiptap/core'
 import type { InteractiveComponent } from './types'
 import { AdvancedEditorContext } from './context'
 import InteractiveComponentExtension from './components/interactive-component/extension'
@@ -46,31 +48,53 @@ const extensions = [
   }),
 ]
 
+const replacer = (key: string, value: any) => {
+  if (value instanceof Map) {
+    return {
+      dataType: 'Map',
+      value: Array.from(value.entries()), // or with spread: value: [...value]
+    }
+  }
+
+  return value
+}
+
+const reviver = (key: string, value: any) => {
+  if (typeof value === 'object' && value !== null) {
+    if (value.dataType === 'Map') {
+      return new Map(value.value)
+    }
+  }
+  return value
+}
+
 interface Props {
-  inConstructor?: boolean
+  mode: 'view' | 'preview' | 'edit'
   value?: {
     content: string
     interactiveComponents: string
   }
-  onChange: ({
+  onChange?: ({
     content,
     interactiveComponents,
   }: {
     content: string
     interactiveComponents: string
   }) => void
-  error: boolean
+  error?: boolean
+  editable?: boolean
 }
 
 export const AdvancedEditor = ({
-  inConstructor = false,
   value,
+  mode = 'edit',
+  editable = true,
   onChange,
   error,
 }: Props) => {
-  const parsedExtenralContent = JSON.parse(value?.content ?? '{}')
+  const parsedExtenralContent = JSON.parse(value?.content ?? '{}', reviver)
   const parsedExternalInteractiveComponents =
-    JSON.parse(value?.interactiveComponents ?? '{}') || {}
+    JSON.parse(value?.interactiveComponents ?? '{}', reviver) || {}
 
   const [content, setContent] = useState(parsedExtenralContent)
   const [interactiveComponents, setInteractiveComponents] = useState(
@@ -84,10 +108,11 @@ export const AdvancedEditor = ({
   useEffect(() => {
     const stringifiedInteractiveComponents = JSON.stringify(
       interactiveComponents,
+      replacer,
     )
-    const stringifiedContent = JSON.stringify(content)
+    const stringifiedContent = JSON.stringify(content, replacer)
 
-    onChange({
+    onChange?.({
       interactiveComponents: stringifiedInteractiveComponents,
       content: stringifiedContent,
     })
@@ -95,15 +120,15 @@ export const AdvancedEditor = ({
 
   const handleContentUpdate = ({ editor }: { editor: Editor }) => {
     const contentAsJSON = editor.getJSON()
-    const stringifiedContent = JSON.stringify(contentAsJSON)
 
-    setContent(stringifiedContent)
+    setContent(contentAsJSON)
   }
 
   const editor = useEditor({
     extensions,
     onUpdate: handleContentUpdate,
     content,
+    editable: editable ?? true,
     autofocus: true,
   })
 
@@ -146,7 +171,7 @@ export const AdvancedEditor = ({
   return (
     <AdvancedEditorContext.Provider
       value={{
-        inConstructor,
+        mode,
         content,
         interactiveComponents,
         constructorOpened,
@@ -160,64 +185,67 @@ export const AdvancedEditor = ({
     >
       <RichTextEditor
         classNames={{ root: classNames.wrapper }}
+        data-editable={editable}
         data-error={error}
         editor={editor}
         mb="5px"
         mt="3px"
       >
-        <RichTextEditor.Toolbar sticky>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-            <RichTextEditor.Strikethrough />
-            <RichTextEditor.ClearFormatting />
-            <RichTextEditor.Highlight />
-            <RichTextEditor.Code />
-          </RichTextEditor.ControlsGroup>
+        {editable ? (
+          <RichTextEditor.Toolbar sticky>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+              <RichTextEditor.ClearFormatting />
+              <RichTextEditor.Highlight />
+              <RichTextEditor.Code />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.H1 />
-            <RichTextEditor.H2 />
-            <RichTextEditor.H3 />
-            <RichTextEditor.H4 />
-            <RichTextEditor.H5 />
-            <RichTextEditor.H6 />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.H1 />
+              <RichTextEditor.H2 />
+              <RichTextEditor.H3 />
+              <RichTextEditor.H4 />
+              <RichTextEditor.H5 />
+              <RichTextEditor.H6 />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Blockquote />
-            <RichTextEditor.Hr />
-            <RichTextEditor.BulletList />
-            <RichTextEditor.OrderedList />
-            <RichTextEditor.CodeBlock />
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Blockquote />
+              <RichTextEditor.Hr />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+              <RichTextEditor.CodeBlock />
 
-            <InteractiveComponentConstructor />
-            <AddImage
-              onComplete={(url) =>
-                editor?.chain().focus().setImage({ src: url }).run()
-              }
-            />
-          </RichTextEditor.ControlsGroup>
+              <InteractiveComponentConstructor />
+              <AddImage
+                onComplete={(url) =>
+                  editor?.chain().focus().setImage({ src: url }).run()
+                }
+              />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Link />
-            <RichTextEditor.Unlink />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.AlignLeft />
-            <RichTextEditor.AlignCenter />
-            <RichTextEditor.AlignJustify />
-            <RichTextEditor.AlignRight />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.AlignLeft />
+              <RichTextEditor.AlignCenter />
+              <RichTextEditor.AlignJustify />
+              <RichTextEditor.AlignRight />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Undo />
-            <RichTextEditor.Redo />
-          </RichTextEditor.ControlsGroup>
-        </RichTextEditor.Toolbar>
-        <RichTextEditor.Content mih={500} />
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Undo />
+              <RichTextEditor.Redo />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+        ) : null}
+        <RichTextEditor.Content bg={editable ? 'dark.7' : 'none'} />
       </RichTextEditor>
     </AdvancedEditorContext.Provider>
   )

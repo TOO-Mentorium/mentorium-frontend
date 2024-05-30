@@ -5,11 +5,13 @@ import {
   GridCol,
   Group,
   Image,
+  NavLink,
   Paper,
   Stack,
   Text,
   ThemeIcon,
   Title,
+  UnstyledButton,
 } from '@mantine/core'
 import NextImage from 'next/image'
 import { cookies } from 'next/headers'
@@ -25,7 +27,7 @@ import {
 } from '@tabler/icons-react'
 import NextLink from 'next/link'
 import type { Course } from '../../../../../entities/course'
-import { AdvancedEditorView } from '../../../../../components/advanced-editor-view'
+import { SimpleEditorView } from '../../../../../components/simple-editor-view'
 import { CourseControlPanel } from '../../../../../components'
 import classNames from './page.module.css'
 
@@ -87,7 +89,7 @@ const Page = async ({
             alt={course.name}
             component={NextImage}
             height={300}
-            src="https://res.cloudinary.com/apollographql/image/upload/v1702931345/odyssey/course-assets-new-brand/shuttle_beige_w7scal.svg"
+            src={course.imageUrl}
             width={400}
           />
         </Group>
@@ -116,11 +118,11 @@ const Page = async ({
             </Stack>
             <Stack gap="xs">
               <Title order={2}>What you'll learn</Title>
-              <AdvancedEditorView stringifiedJson={course.whatWillLearn} />
+              <SimpleEditorView stringifiedJson={course.whatWillLearn} />
             </Stack>
             <Stack gap="xs">
               <Title order={2}>Prerequisites</Title>
-              <AdvancedEditorView stringifiedJson={course.prerequisites} />
+              <SimpleEditorView stringifiedJson={course.prerequisites} />
             </Stack>
           </Stack>
         </GridCol>
@@ -130,14 +132,17 @@ const Page = async ({
             <Paper bg="dark.7" radius="sm" shadow="xs" w="450px">
               <Stack gap="0px">
                 {course.lessons.length ? (
-                  <div>
+                  <>
                     {course.lessons.map((lesson) => (
                       <Box
                         className={classNames.lesson}
+                        component={NextLink}
+                        href={`/studio/courses/${courseId}/lessons/${lesson.uid}`}
                         key={lesson.uid}
-                        p="md"
+                        style={{ textDecoration: 'none' }}
+                        w="100%"
                       >
-                        <Group justify="space-between">
+                        <Group justify="space-between" w="100%">
                           <Text fw={600} key={lesson.uid}>
                             {lesson.title}
                           </Text>
@@ -147,7 +152,7 @@ const Page = async ({
                         </Group>
                       </Box>
                     ))}
-                  </div>
+                  </>
                 ) : (
                   <Stack align="center" h={100} justify="center">
                     <Text c="dark.1" p="md">
@@ -157,7 +162,7 @@ const Page = async ({
                 )}
                 <Button
                   component={NextLink}
-                  href={`/studio/courses/${courseId}/lessons/new-lesson`}
+                  href={`/studio/courses/${courseId}/new-lesson`}
                   leftSection={<IconPlus />}
                   radius="0px 0px 5px 5px"
                   size="md"

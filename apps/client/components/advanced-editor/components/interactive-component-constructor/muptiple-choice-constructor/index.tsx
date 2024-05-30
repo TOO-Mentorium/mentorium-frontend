@@ -172,7 +172,7 @@ export const MultipleChoiceCostructor = ({ component, onUpdate }: Props) => {
         </Button>
       </Stack>
       <Divider />
-      <MultipleChoice component={component} />
+      <MultipleChoice component={component} mode="edit" />
     </Stack>
   )
 }

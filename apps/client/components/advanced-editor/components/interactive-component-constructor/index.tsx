@@ -148,6 +148,7 @@ export const InteractiveComponentConstructor = () => {
         opened={constructorOpened}
         size="1000px"
         title="Interactive Component Constructor"
+        yOffset={100}
       >
         <Stack align="flex-end" w="100%">
           <Group align="flex-start" gap="lg" w="100%" wrap="nowrap">
