@@ -48,22 +48,22 @@ export const CourseCard = ({ course, withAuthor = true, href }: Props) => {
             {course.description}
           </Text>
         </Stack>
-        {withAuthor ? (
-          <Group gap="xs" justify="flex-end">
+        <Stack>
+          {withAuthor ? (
             <Group gap="5px">
               <Avatar color="blue" size="sm">
                 {course.author.username[0]?.toUpperCase()}
               </Avatar>
               <Text fw={500}>{course.author.username}</Text>
             </Group>
-          </Group>
-        ) : null}
-        <Button
-          rightSection={<IconEdit size="18px" stroke={2} />}
-          variant="light"
-        >
-          View
-        </Button>
+          ) : null}
+          <Button
+            rightSection={<IconEdit size="18px" stroke={2} />}
+            variant="light"
+          >
+            View
+          </Button>
+        </Stack>
       </Stack>
     </Card>
   )

@@ -10,7 +10,7 @@ module.exports = {
   },
   env: {
     apiUrl: 'https://mentorium.su/api/api_v1',
-    bffUrl: 'https://app.mentorium.com/api',
+    bffUrl: 'https://app.mentorium.su/api',
     // apiUrl: 'https://mentorium.su/api/api_v1',
     // bffUrl: 'https://localhost:3000/api',
   },

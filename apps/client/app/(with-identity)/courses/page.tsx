@@ -12,8 +12,8 @@ import type { CourseSimplified } from '../../../entities/course'
 import { CourseCard } from '../../../entities/course/ui/course-card'
 import { CoursesSort } from '../../../components'
 import { SearchInput } from '../../../components/search-input'
-import classNames from './page.module.css'
 import { apiUrl } from '../../../shared/lib'
+import classNames from './page.module.css'
 
 export const metadata = {
   title: 'Courses | Mentorium',
@@ -25,7 +25,9 @@ const getCourses = async (
   direction: string,
 ) => {
   const response = await fetch(
-    apiUrl(`/courses?page=1&limit=20&search=${searchQuery}&sortBy=${sortBy}&sortDirection=${direction}`),
+    apiUrl(
+      `/courses?page=1&limit=20&search=${searchQuery}&sortBy=${sortBy}&sortDirection=${direction}`,
+    ),
     {
       method: 'GET',
       credentials: 'include',
@@ -106,7 +108,7 @@ const Page = async ({
                 {courses.map((course) => (
                   <CourseCard
                     course={course}
-                    href={`/courses/${course.slug}`}
+                    href={`/courses/${course.uid}`}
                     key={course.uid}
                   />
                 ))}
