@@ -1,0 +1,7 @@
+.wrapper {
+    transition: border-color 100ms;
+
+    &[data-error="true"] {
+       border: 1px solid var(--mantine-color-error);
+    }
+}

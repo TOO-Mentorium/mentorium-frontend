@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Button,
   Divider,
@@ -8,42 +10,101 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
-import { IconArrowRight } from '@tabler/icons-react'
+import { IconArrowRight, IconExclamationMark } from '@tabler/icons-react'
 import Link from 'next/link'
-
-export const metadata = {
-  title: 'Login | Mentorium',
-}
+import { useState } from 'react'
+import { useForm } from '@mantine/form'
+import { z } from 'zod'
+import { useRouter } from 'next/navigation'
+import { notifications } from '@mantine/notifications'
 
 const Page = () => {
-  const onSubmit = async (formData: FormData) => {
-    'use server'
+  const router = useRouter()
 
-    const rawFormData = {
-      username: formData.get('email'),
-      password: formData.get('password'),
-    }
+  const [submitting, setSubmitting] = useState(false)
 
-    const response = await fetch('http://localhost:3001/api_v1/auth/login', {
+  const form = useForm({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+
+    validate: {
+      username: (value) => {
+        if (!z.string().min(1).safeParse(value).success) {
+          return 'Username is required'
+        }
+
+        if (!z.string().min(3).safeParse(value).success) {
+          return 'Username must be at least 3 characters long'
+        }
+
+        return null
+      },
+      password: (value) => {
+        if (!z.string().min(1).safeParse(value).success) {
+          return 'Password is required'
+        }
+
+        if (!z.string().min(6).safeParse(value).success) {
+          return 'Password must be at least 6 characters long'
+        }
+
+        return null
+      },
+    },
+  })
+
+  const handleSubmit = async (values: {
+    username: string
+    password: string
+  }) => {
+    setSubmitting(true)
+
+    const res = await fetch('https://localhost:3000/api/auth', {
       method: 'POST',
-      body: JSON.stringify(rawFormData),
+      credentials: 'include',
+      body: JSON.stringify(values),
       headers: {
         'Content-Type': 'application/json',
       },
     })
 
-    console.log(rawFormData)
+    const data = (await res.json()) as {
+      success: boolean
+      error?: {
+        message: string
+        code: number
+      }
+    }
 
-    const data = await response.json()
+    setSubmitting(false)
 
-    console.log(data)
+    if (data.success) {
+      router.push('/courses')
+    }
+
+    if (!data.success && data.error?.code === 401) {
+      form.setFieldError('username', 'Invalid username or password')
+      form.setFieldError('password', 'Invalid username or password')
+    }
+
+    if (!data.success && data.error?.code === 500) {
+      notifications.show({
+        title: 'Server error',
+        message: 'An unexpected error occurred. Please try again later.',
+        color: 'red',
+        autoClose: 5000,
+        icon: <IconExclamationMark size="20px" />,
+      })
+    }
   }
 
   return (
-    <Paper bg="dark.7" p="lg" w="450px">
+    <Paper bg="dark.7" p="lg" shadow="xs" w="450px">
       <Stack align="center">
         <Group justify="space-between" w="100%">
-          <Title order={3}>Login</Title>
+          <Title order={3}>Log in</Title>
           <Button
             component={Link}
             href="/create-account"
@@ -55,17 +116,23 @@ const Page = () => {
           </Button>
         </Group>
         <Divider orientation="horizontal" w="100%" />
-        <form action={onSubmit} style={{ width: '100%' }}>
+        <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: '100%' }}>
           <Stack gap="sm">
-            <TextInput label="Email" name="email" placeholder="Enter Email" />
+            <TextInput
+              key={form.key('username')}
+              label="Username"
+              placeholder="Enter Username"
+              {...form.getInputProps('username')}
+            />
             <PasswordInput
+              key={form.key('password')}
               label="Password"
-              name="password"
               placeholder="Enter Password"
               type="password"
+              {...form.getInputProps('password')}
             />
-            <Button mt="md" type="submit" w="100%">
-              Back to Learning
+            <Button fullWidth loading={submitting} mt="md" type="submit">
+              Continue Learning
             </Button>
           </Stack>
         </form>

@@ -1,8 +1,9 @@
 import { createTheme } from '@mantine/core'
-import { UITextInput } from './components'
+import { UIActionIcon, UIModal, UITextInput, UITextarea } from './components'
 
 export const theme = createTheme({
   defaultRadius: 'sm',
+  focusRing: 'never',
   colors: {
     blue: [
       '#e2f8ff',
@@ -19,5 +20,8 @@ export const theme = createTheme({
   },
   components: {
     TextInput: UITextInput,
+    ActionIcon: UIActionIcon,
+    Textarea: UITextarea,
+    Modal: UIModal,
   },
 })

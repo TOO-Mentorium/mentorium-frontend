@@ -1,0 +1,7 @@
+.title {
+    background-image: linear-gradient(90deg, var(--mantine-color-indigo-6) 2%, var(--mantine-color-blue-8) 100%);;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+

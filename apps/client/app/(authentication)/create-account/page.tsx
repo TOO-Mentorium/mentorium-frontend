@@ -22,34 +22,36 @@ const Page = () => {
     'use server'
 
     const rawFormData = {
-      username: formData.get('email'),
+      email: formData.get('email'),
       password: formData.get('password'),
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      username: formData.get('username'),
     }
 
-    const response = await fetch('http://localhost:3001/api_v1/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(rawFormData),
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'https://mentorium.su/api/api_v1/auth/register',
+      {
+        method: 'POST',
+        body: JSON.stringify(rawFormData),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
 
-    console.log(rawFormData)
+    if (!response.ok) {
+      console.log(await response.json())
+    }
 
     const data = await response.json()
-
-    console.log(data)
   }
 
   return (
-    <Paper bg="dark.7" p="lg" w="450px">
+    <Paper bg="dark.7" p="lg" shadow="xs" w="450px">
       <Stack align="center">
-        <Group
-          align="flex-start"
-          align="center"
-          justify="space-between"
-          w="100%"
-        >
+        <Group align="flex-start" justify="space-between" w="100%">
           <Title order={3}>Create Account</Title>
           <Button
             component={Link}
@@ -78,6 +80,11 @@ const Page = () => {
                 w="100%"
               />
             </Group>
+            <TextInput
+              label="Username"
+              name="username"
+              placeholder="Enter Username"
+            />
             <TextInput label="Email" name="email" placeholder="Enter Email" />
             <PasswordInput
               label="Password"

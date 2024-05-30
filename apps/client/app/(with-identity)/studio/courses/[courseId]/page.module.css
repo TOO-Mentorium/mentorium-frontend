@@ -1,0 +1,34 @@
+.title {
+    background-image: linear-gradient(90deg, var(--mantine-color-indigo-6) 2%, var(--mantine-color-blue-8) 100%);;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.coursesWrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+
+    margin-top: var(--mantine-spacing-md);
+}
+
+.lesson {
+    border-bottom: 1px solid var(--mantine-color-dark-5);
+    padding: var(--mantine-spacing-md);
+    cursor: pointer;
+    transition: background-color 100ms ease;
+
+    &:hover {
+        background-color: var(--mantine-color-dark-6);
+    }
+    
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:first-child {
+        border-radius: var(--mantine-radius-sm) var(--mantine-radius-sm) 0 0;
+    }
+
+}

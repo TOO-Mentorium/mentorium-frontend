@@ -16,7 +16,9 @@ const AuthenticationLayout = ({ children }: Props) => {
           </Text>
         </Group>
       </Group>
-      <Container size="xl">{children}</Container>
+      <Container pt="100px" size="xl">
+        {children}
+      </Container>
     </Stack>
   )
 }

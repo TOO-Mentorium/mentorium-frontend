@@ -56,6 +56,13 @@ module.exports = {
       printWidth: 80
      }      
     ],
+    "import/no-anonymous-default-export": "off",
+    "import/no-named-as-default": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "no-unused-vars": "off",
     "@typescript-eslint/explicit-function-return-type": "off"
   }
 };
