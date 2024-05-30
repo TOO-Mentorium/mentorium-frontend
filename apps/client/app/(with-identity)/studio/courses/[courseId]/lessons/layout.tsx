@@ -91,7 +91,7 @@ const LessonsLayout = async ({
                   <Button
                     component={NextLink}
                     fullWidth
-                    href={`/studio/courses/${courseId}/lessons`}
+                    href={`/studio/courses/${courseId}/lessons/new-lesson`}
                     leftSection={<IconPlus />}
                     size="md"
                     variant="light"

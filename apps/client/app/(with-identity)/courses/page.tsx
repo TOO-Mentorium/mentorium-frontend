@@ -1,26 +1,12 @@
 import {
-  ActionIcon,
-  Avatar,
   Box,
-  Button,
-  Card,
-  CardSection,
-  Checkbox,
   Container,
-  Grid,
-  GridCol,
   Group,
-  Image,
   Loader,
-  SegmentedControl,
   Stack,
   Text,
-  TextInput,
   Title,
 } from '@mantine/core'
-import { IconSearch, IconSortDescending } from '@tabler/icons-react'
-import Link from 'next/link'
-import NextImage from 'next/image'
 import { Suspense } from 'react'
 import type { CourseSimplified } from '../../../entities/course'
 import { CourseCard } from '../../../entities/course/ui/course-card'

@@ -1,6 +1,6 @@
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from '@tiptap/extension-image'
 import { createLowlight } from 'lowlight'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
@@ -11,11 +11,13 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { v4 as uuidv4 } from 'uuid'
 import ts from 'highlight.js/lib/languages/typescript'
 import js from 'highlight.js/lib/languages/javascript'
+import type { Editor } from '@tiptap/core'
 import type { InteractiveComponent } from './types'
 import { AdvancedEditorContext } from './context'
 import InteractiveComponentExtension from './components/interactive-component/extension'
 import { AddImage } from './components/add-image'
 import { InteractiveComponentConstructor } from './components/interactive-component-constructor'
+import classNames from './index.module.css'
 
 const lowlight = createLowlight()
 
@@ -46,17 +48,61 @@ const extensions = [
 
 interface Props {
   inConstructor?: boolean
+  value?: {
+    content: string
+    interactiveComponents: string
+  }
+  onChange: ({
+    content,
+    interactiveComponents,
+  }: {
+    content: string
+    interactiveComponents: string
+  }) => void
+  error: boolean
 }
 
-export const AdvancedEditor = ({ inConstructor = false, value }: Props) => {
-  const [content, setContent] = useState('')
-  const [interactiveComponents, setInteractiveComponents] = useState({})
+export const AdvancedEditor = ({
+  inConstructor = false,
+  value,
+  onChange,
+  error,
+}: Props) => {
+  const parsedExtenralContent = JSON.parse(value?.content ?? '{}')
+  const parsedExternalInteractiveComponents =
+    JSON.parse(value?.interactiveComponents ?? '{}') || {}
+
+  const [content, setContent] = useState(parsedExtenralContent)
+  const [interactiveComponents, setInteractiveComponents] = useState(
+    parsedExternalInteractiveComponents,
+  )
+
   const [constructorOpened, setConstructorOpened] = useState(false)
   const [componentToEdit, setComponentToEdit] =
     useState<InteractiveComponent | null>(null)
 
+  useEffect(() => {
+    const stringifiedInteractiveComponents = JSON.stringify(
+      interactiveComponents,
+    )
+    const stringifiedContent = JSON.stringify(content)
+
+    onChange({
+      interactiveComponents: stringifiedInteractiveComponents,
+      content: stringifiedContent,
+    })
+  }, [content, interactiveComponents, onChange])
+
+  const handleContentUpdate = ({ editor }: { editor: Editor }) => {
+    const contentAsJSON = editor.getJSON()
+    const stringifiedContent = JSON.stringify(contentAsJSON)
+
+    setContent(stringifiedContent)
+  }
+
   const editor = useEditor({
     extensions,
+    onUpdate: handleContentUpdate,
     content,
     autofocus: true,
   })
@@ -112,7 +158,13 @@ export const AdvancedEditor = ({ inConstructor = false, value }: Props) => {
         addInteractiveComponent: handleInteractiveComponentAdd,
       }}
     >
-      <RichTextEditor editor={editor}>
+      <RichTextEditor
+        classNames={{ root: classNames.wrapper }}
+        data-error={error}
+        editor={editor}
+        mb="5px"
+        mt="3px"
+      >
         <RichTextEditor.Toolbar sticky>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Bold />
@@ -165,7 +217,7 @@ export const AdvancedEditor = ({ inConstructor = false, value }: Props) => {
             <RichTextEditor.Redo />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
-        <RichTextEditor.Content />
+        <RichTextEditor.Content mih={500} />
       </RichTextEditor>
     </AdvancedEditorContext.Provider>
   )

@@ -157,7 +157,7 @@ const Page = async ({
                 )}
                 <Button
                   component={NextLink}
-                  href={`/studio/courses/${courseId}/lessons`}
+                  href={`/studio/courses/${courseId}/lessons/new-lesson`}
                   leftSection={<IconPlus />}
                   radius="0px 0px 5px 5px"
                   size="md"

@@ -1,8 +1,11 @@
 export interface Lesson {
-  id: string
-  name: string
+  uid: string
+  title: string
+  averageTimeToRead: number
   content: string
-  interactiveContent: string
+  interactiveComponents: string
+  createdDate: string
+  updatedDate: string
 }
 
 export interface LessonSimplified {
