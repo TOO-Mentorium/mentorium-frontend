@@ -7,6 +7,7 @@ import { BackButton } from '../../../../../../../components'
 import { EditLesson } from '../../../../../../../features/edit-lesson'
 import type { Lesson } from '../../../../../../../entities/lesson/types'
 import classNames from './page.module.css'
+import { apiUrl } from '../../../../../../../shared/lib'
 
 export const metadata = {
   title: 'Edit Lesson | Mentorium',
@@ -14,7 +15,7 @@ export const metadata = {
 
 const getLesson = async (lessonId: string) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/lessons/${lessonId}`,
+    apiUrl(`/lessons/${lessonId}`),
     {
       method: 'GET',
       headers: {

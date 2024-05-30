@@ -2,11 +2,12 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { apiUrl } from '../../../shared/lib'
 
 export const POST = async (req: NextRequest) => {
   const body = await req.json()
 
-  const response = await fetch('https://mentorium.su/api/api_v1/lessons', {
+  const response = await fetch(apiUrl('/lessons'), {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
@@ -42,7 +43,7 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
   const body = await req.json()
 
-  const response = await fetch('https://mentorium.su/api/api_v1/lessons', {
+  const response = await fetch(apiUrl('/lessons'), {
     method: 'PUT',
     body: JSON.stringify(body),
     headers: {
@@ -80,7 +81,7 @@ export const DELETE = async (req: NextRequest) => {
   const courseUid = new URL(req.url).searchParams.get('courseUid')
 
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/lessons?uid=${uid}&courseUid=${courseUid}`,
+    apiUrl(`/lessons?uid=${uid}&courseUid=${courseUid}`),
     {
       method: 'DELETE',
       headers: {

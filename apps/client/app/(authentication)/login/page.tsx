@@ -17,6 +17,7 @@ import { useForm } from '@mantine/form'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
+import { bffUrl } from '../../../shared/lib'
 
 const Page = () => {
   const router = useRouter()
@@ -61,7 +62,7 @@ const Page = () => {
   }) => {
     setSubmitting(true)
 
-    const res = await fetch('https://localhost:3000/api/auth', {
+    const res = await fetch(bffUrl('/auth'), {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify(values),

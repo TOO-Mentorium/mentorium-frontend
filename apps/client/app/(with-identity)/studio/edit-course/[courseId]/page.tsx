@@ -4,6 +4,7 @@ import { cookies } from 'next/headers'
 import { BackButton } from '../../../../../components'
 import type { Course } from '../../../../../entities/course'
 import { EditCourse } from '../../../../../features/edit-course'
+import { apiUrl } from '../../../../../shared/lib'
 
 export const metadata = {
   title: 'Edit Course | Mentorium',
@@ -11,7 +12,7 @@ export const metadata = {
 
 const getCourse = async (courseId: string) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/courses/preview/${courseId}`,
+    apiUrl(`/courses/preview/${courseId}`),
     {
       method: 'GET',
       headers: {

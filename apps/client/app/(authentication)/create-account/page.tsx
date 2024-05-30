@@ -12,6 +12,7 @@ import {
 } from '@mantine/core'
 import { IconArrowRight } from '@tabler/icons-react'
 import Link from 'next/link'
+import { apiUrl } from '../../../shared/lib'
 
 export const metadata = {
   title: 'Create Account | Mentorium',
@@ -30,7 +31,7 @@ const Page = () => {
     }
 
     const response = await fetch(
-      'https://mentorium.su/api/api_v1/auth/register',
+      apiUrl('/auth/register'),
       {
         method: 'POST',
         body: JSON.stringify(rawFormData),

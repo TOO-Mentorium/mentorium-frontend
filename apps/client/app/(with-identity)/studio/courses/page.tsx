@@ -20,6 +20,7 @@ import { CourseCard } from '../../../../entities/course'
 import { SearchInput } from '../../../../components/search-input'
 import { CoursesSort } from '../../../../components'
 import classNames from './page.module.css'
+import { apiUrl } from '../../../../shared/lib'
 
 export const metadata = {
   title: 'Studio | Mentorium',
@@ -33,7 +34,7 @@ const getCourses = async (
   console.log(searchQuery, '123')
 
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/courses/my?search=${searchQuery}&sortBy=${sortBy}&direction=${direction}`,
+    apiUrl(`/courses/my?search=${searchQuery}&sortBy=${sortBy}&direction=${direction}`),
     {
       headers: {
         Cookie: cookies().toString(),

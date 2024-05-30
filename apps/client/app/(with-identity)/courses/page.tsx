@@ -13,6 +13,7 @@ import { CourseCard } from '../../../entities/course/ui/course-card'
 import { CoursesSort } from '../../../components'
 import { SearchInput } from '../../../components/search-input'
 import classNames from './page.module.css'
+import { apiUrl } from '../../../shared/lib'
 
 export const metadata = {
   title: 'Courses | Mentorium',
@@ -24,7 +25,7 @@ const getCourses = async (
   direction: string,
 ) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/courses?page=1&limit=20&search=${searchQuery}&sortBy=${sortBy}&sortDirection=${direction}`,
+    apiUrl(`/courses?page=1&limit=20&search=${searchQuery}&sortBy=${sortBy}&sortDirection=${direction}`),
     {
       method: 'GET',
       credentials: 'include',

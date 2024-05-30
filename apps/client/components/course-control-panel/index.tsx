@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { revalidateTag } from 'next/cache'
 import NextLink from 'next/link'
 import type { Course } from '../../entities/course'
+import { bffUrl } from '../../shared/lib'
 
 export const CourseControlPanel = ({ course }: { course: Course }) => {
   const router = useRouter()
@@ -24,7 +25,7 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
     setDeleting(true)
 
     const response = await fetch(
-      `https://localhost:3000/api/courses?uid=${course.uid}`,
+      bffUrl(`/courses?uid=${course.uid}`),
       {
         method: 'DELETE',
         credentials: 'include',
@@ -63,7 +64,7 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
   const handlePublishClick = async () => {
     setPublishing(true)
 
-    const response = await fetch(`https://localhost:3000/api/courses`, {
+    const response = await fetch(bffUrl(`/courses`), {
       method: 'PUT',
       credentials: 'include',
       body: JSON.stringify({
@@ -82,6 +83,7 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
     })
 
     const data = (await response.json()) as {
+      
       success: boolean
       error?: {
         message: string
@@ -90,6 +92,9 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
     }
 
     if (!data.success) {
+
+
+console.log(data)
       notifications.show({
         title: 'Server error',
         message:

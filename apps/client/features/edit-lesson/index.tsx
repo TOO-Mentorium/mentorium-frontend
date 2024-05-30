@@ -16,6 +16,7 @@ import { notifications } from '@mantine/notifications'
 import { IconExclamationMark } from '@tabler/icons-react'
 import type { Lesson } from '../../entities/lesson/types'
 import { AdvancedEditor } from '../../components/advanced-editor'
+import { bffUrl } from '../../shared/lib'
 
 export const EditLesson = ({
   courseId,
@@ -77,7 +78,7 @@ export const EditLesson = ({
   }) => {
     setSubmitting(true)
 
-    const response = await fetch('https://localhost:3000/api/lessons', {
+    const response = await fetch(bffUrl('/lessons'), {
       method: 'PUT',
       credentials: 'include',
       body: JSON.stringify({ ...values, courseUid: courseId, uid: lesson.uid }),

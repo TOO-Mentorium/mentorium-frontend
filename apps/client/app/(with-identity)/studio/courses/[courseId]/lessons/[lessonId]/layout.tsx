@@ -17,10 +17,11 @@ import type { ReactNode } from 'react'
 import { IconPlus } from '@tabler/icons-react'
 import NextLink from 'next/link'
 import classNames from './layout.module.css'
+import { apiUrl } from '../../../../../../../shared/lib'
 
 const getCourseLessons = async (courseId: string) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/courses/preview/${courseId}`,
+    apiUrl(`/courses/preview/${courseId}`),
     {
       method: 'GET',
       headers: {

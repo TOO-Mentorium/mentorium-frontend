@@ -13,13 +13,14 @@ import { IconLogout } from '@tabler/icons-react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import type { User } from '../../entities/user/types'
+import { apiUrl } from '../../shared/lib'
 
 interface Props {
   children: React.ReactNode
 }
 
 const getUser = async () => {
-  const response = await fetch('https://mentorium.su/api/api_v1/user/me', {
+  const response = await fetch(apiUrl('/user/me'), {
     method: 'GET',
     headers: {
       Cookie: cookies().toString(),

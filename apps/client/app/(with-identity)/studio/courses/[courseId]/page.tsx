@@ -30,6 +30,7 @@ import type { Course } from '../../../../../entities/course'
 import { SimpleEditorView } from '../../../../../components/simple-editor-view'
 import { CourseControlPanel } from '../../../../../components'
 import classNames from './page.module.css'
+import { apiUrl } from '../../../../../shared/lib'
 
 export const generateMetadata = async ({
   params: { courseId },
@@ -45,7 +46,7 @@ export const generateMetadata = async ({
 
 const getCourse = async (courseId: string) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/courses/preview/${courseId}`,
+    apiUrl(`/courses/preview/${courseId}`),
     {
       method: 'GET',
       headers: {

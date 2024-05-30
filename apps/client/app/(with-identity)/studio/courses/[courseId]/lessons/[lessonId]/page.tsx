@@ -11,6 +11,7 @@ import NextLink from 'next/link'
 import type { Lesson } from '../../../../../../../entities/lesson/types'
 import { AdvancedEditor } from '../../../../../../../components/advanced-editor'
 import { LessonControlPanel } from '../../../../../../../components'
+import { apiUrl } from '../../../../../../../shared/lib'
 
 export const generateMetadata = async ({
   params: { lessonId },
@@ -26,7 +27,7 @@ export const generateMetadata = async ({
 
 const getLesson = async (lessonId: string) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/lessons/${lessonId}`,
+    apiUrl(`/lessons/${lessonId}`),
     {
       method: 'GET',
       headers: {
@@ -49,7 +50,7 @@ const getLesson = async (lessonId: string) => {
 
 const getCourseLessons = async (courseId: string) => {
   const response = await fetch(
-    `https://mentorium.su/api/api_v1/courses/preview/${courseId}`,
+    apiUrl(`/courses/preview/${courseId}`),
     {
       method: 'GET',
       headers: {

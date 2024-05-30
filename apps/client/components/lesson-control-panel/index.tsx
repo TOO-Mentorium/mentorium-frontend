@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import NextLink from 'next/link'
 import type { LessonSimplified } from '../../entities/lesson/types'
+import { bffUrl } from '../../shared/lib'
 
 export const LessonControlPanel = ({
   courseId,
@@ -25,7 +26,7 @@ export const LessonControlPanel = ({
     setDeleting(true)
 
     const response = await fetch(
-      `https://localhost:3000/api/lessons?uid=${lessonId}&courseUid=${courseId}`,
+      bffUrl(`/lessons?uid=${lessonId}&courseUid=${courseId}`),
       {
         method: 'DELETE',
         credentials: 'include',

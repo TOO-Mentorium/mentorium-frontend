@@ -16,6 +16,7 @@ import { notifications } from '@mantine/notifications'
 import { IconExclamationMark } from '@tabler/icons-react'
 import type { Lesson } from '../../entities/lesson/types'
 import { AdvancedEditor } from '../../components/advanced-editor'
+import { bffUrl } from '../../shared/lib'
 
 export const CreateLesson = ({ courseId }: { courseId: string }) => {
   const router = useRouter()
@@ -71,7 +72,7 @@ export const CreateLesson = ({ courseId }: { courseId: string }) => {
   }) => {
     setSubmitting(true)
 
-    const response = await fetch('https://localhost:3000/api/lessons', {
+    const response = await fetch(bffUrl('/lessons'), {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify({ ...values, courseUid: courseId }),

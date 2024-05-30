@@ -26,6 +26,7 @@ import NextImage from 'next/image'
 import { SimpleTextEditor } from '../../components/simple-text-editor'
 import type { Course } from '../../entities/course'
 import classNames from './index.module.css'
+import { bffUrl } from '../../shared/lib'
 
 export const CreateCourse = () => {
   const router = useRouter()
@@ -103,7 +104,7 @@ export const CreateCourse = () => {
   }) => {
     setSubmitting(true)
 
-    const response = await fetch('https://localhost:3000/api/courses', {
+    const response = await fetch(bffUrl('/courses'), {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify(values),
@@ -163,7 +164,7 @@ export const CreateCourse = () => {
 
     console.log(formData.get('file'))
 
-    const response = await fetch('https://localhost:3000/api/storage/upload', {
+    const response = await fetch(bffUrl('/storage/upload'), {
       method: 'POST',
       credentials: 'include',
       body: formData,
