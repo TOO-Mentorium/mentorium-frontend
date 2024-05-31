@@ -82,7 +82,7 @@ interface Props {
     interactiveComponents: string
   }) => void
   error?: boolean
-  onUpdateProgress: (interactiveComponents: string) => void
+  onUpdateProgress?: (interactiveComponents: string) => void
   editable?: boolean
 }
 
@@ -176,7 +176,7 @@ export const AdvancedEditor = ({
       replacer,
     )
 
-    onUpdateProgress(stringifiedInteractiveComponents)
+    onUpdateProgress?.(stringifiedInteractiveComponents)
   }
 
   return (
