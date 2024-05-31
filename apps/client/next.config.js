@@ -10,7 +10,7 @@ module.exports = {
   },
   env: {
     apiUrl: 'https://mentorium.su/api/api_v1',
-    bffUrl: 'https://app-mentorium.netlify.app/api',
+    bffUrl: 'https://mentorium-frontend-client.vercel.app/api',
     // apiUrl: 'https://mentorium.su/api/api_v1',
     // bffUrl: 'https://localhost:3000/api',
   },
