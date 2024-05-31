@@ -1,0 +1,24 @@
+.lessonLink {
+    border-bottom: 1px solid var(--mantine-color-dark-5);
+    cursor: pointer;
+    transition: background-color 100ms ease;
+    padding: var(--mantine-spacing-sm);
+
+    font-size: var(--mantine-font-size-md);
+
+    &[data-active="true"] {
+        background-color: var(--mantine-color-blue-9);
+
+        &:hover {
+            background-color: var(--mantine-color-blue-9);
+        }
+    }
+
+    &:hover {
+        background-color: var(--mantine-color-dark-6);
+    }
+    
+    &:last-child {
+        border-bottom: none;
+    }
+}
