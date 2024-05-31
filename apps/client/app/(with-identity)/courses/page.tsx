@@ -29,6 +29,7 @@ const getCourses = async (
       `/courses?page=1&limit=20&search=${searchQuery}&sortBy=${sortBy}&sortDirection=${direction}`,
     ),
     {
+      cache: 'no-store',
       method: 'GET',
       credentials: 'include',
       headers: {

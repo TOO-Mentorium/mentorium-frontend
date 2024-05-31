@@ -29,8 +29,8 @@ import NextLink from 'next/link'
 import type { Course } from '../../../../../entities/course'
 import { SimpleEditorView } from '../../../../../components/simple-editor-view'
 import { CourseControlPanel } from '../../../../../components'
-import classNames from './page.module.css'
 import { apiUrl } from '../../../../../shared/lib'
+import classNames from './page.module.css'
 
 export const generateMetadata = async ({
   params: { courseId },
@@ -45,16 +45,13 @@ export const generateMetadata = async ({
 }
 
 const getCourse = async (courseId: string) => {
-  const response = await fetch(
-    apiUrl(`/courses/preview/${courseId}`),
-    {
-      method: 'GET',
-      headers: {
-        Cookie: cookies().toString(),
-        'Content-Type': 'application/json',
-      },
+  const response = await fetch(apiUrl(`/courses/preview/${courseId}`), {
+    method: 'GET',
+    headers: {
+      Cookie: cookies().toString(),
+      'Content-Type': 'application/json',
     },
-  )
+  })
 
   if (!response.ok) {
     if ([404, 500].includes(response.status)) {
@@ -77,7 +74,7 @@ const Page = async ({
   return (
     <Stack pos="relative">
       <Stack bg="dark.6" gap="xs" p="50px" w="100%">
-        <Group justify="space-between">
+        <Group justify="space-between" wrap="nowrap">
           <Stack gap="3px">
             <Title className={classNames.title} order={1} size="40px">
               {course.name}

@@ -36,6 +36,8 @@ const getCourses = async (
       `/courses/my?search=${searchQuery}&sortBy=${sortBy}&direction=${direction}`,
     ),
     {
+      cache: 'no-store',
+
       headers: {
         Cookie: cookies().toString(),
         'Content-Type': 'application/json',

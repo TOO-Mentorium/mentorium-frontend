@@ -8,13 +8,19 @@ import {
   Text,
   ThemeIcon,
 } from '@mantine/core'
-import { IconAlertCircle, IconCode } from '@tabler/icons-react'
+import {
+  IconAlertCircle,
+  IconCode,
+  IconExclamationMark,
+} from '@tabler/icons-react'
 import { useState } from 'react'
 import { Editor } from '@monaco-editor/react'
+import { notifications } from '@mantine/notifications'
 import type {
   CodeChallengeComponent,
   CodeChallengeInteractionState,
 } from '../../../types'
+import { bffUrl } from '../../../../../shared/lib'
 
 interface Props {
   mode: 'view' | 'preview' | 'edit'
@@ -35,6 +41,7 @@ export const CodeChallenge = ({
 
   const [code, setCode] = useState<string>('')
   const [completed, setCompleted] = useState(interactionState.completed)
+  const [submitting, setSubmitting] = useState(false)
 
   const [errors, setErrors] = useState([])
 
@@ -47,38 +54,41 @@ export const CodeChallenge = ({
     })
   }
 
-  // const handleSubmit = () => {
-  //   if (selectedAnswers.length === 0) {
-  //     setCompleted(false)
-  //     setPleaseSelectAnswerShown(true)
+  const handleSubmit = async () => {
+    setSubmitting(true)
 
-  //     return
-  //   }
+    const response = await fetch(bffUrl('/test-code-challenge'), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({ code: code + state.tests, languageId: 93 }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-  //   const isCorrect = selectedAnswers.every((id) => {
-  //     const answer = state.answers.get(id)
+    const data = (await response.json()) as {
+      success: boolean
+      error?: {
+        message: string
+        code: number
+      }
+    }
 
-  //     return answer?.isCorrect
-  //   })
+    if (!data.success) {
+      notifications.show({
+        title: 'Server error',
+        message:
+          'An unexpected error occurred while creating the course. Please try again later.',
+        color: 'red',
+        autoClose: 5000,
+        icon: <IconExclamationMark size="20px" />,
+      })
+    }
 
-  //   setPleaseSelectAnswerShown(false)
-  //   setCompleted(false)
+    console.log(data)
 
-  //   if (isCorrect) {
-  //     setTryAgainShown(false)
-  //     setCompleted(true)
-
-  //     onInteractionStateUpdate?.({
-  //       selectedAnswers: [...selectedAnswers],
-  //       completed: true,
-  //     })
-
-  //     return
-  //   }
-
-  //   setCompleted(false)
-  //   setTryAgainShown(true)
-  // }
+    setSubmitting(false)
+  }
 
   const handleReset = () => {
     setCode(state.initialCode)
@@ -171,7 +181,12 @@ export const CodeChallenge = ({
               Completed
             </Text>
           ) : (
-            <Button onClick={() => {}} size="xs" variant="light">
+            <Button
+              loading={submitting}
+              onClick={() => handleSubmit()}
+              size="xs"
+              variant="light"
+            >
               Submit
             </Button>
           )}
