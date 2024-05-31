@@ -29,7 +29,7 @@ const getUserProgress = async (lessonId: string) => {
     },
   })
 
-  const data = await response.json()
+  const { data } = await response.json()
 
   if (!response.ok) {
     if ([500].includes(response.status)) {
@@ -39,9 +39,10 @@ const getUserProgress = async (lessonId: string) => {
     return { state: 'not-started' }
   }
 
-  console.log(data)
-
-  return { state: 'started' }
+  return {
+    state: 'started',
+    interactiveComponents: data.interactiveComponents as string,
+  }
 }
 
 const getLesson = async (lessonId: string) => {
@@ -114,15 +115,20 @@ const Page = async ({
       <Box mx="auto" w="80%">
         <AdvancedEditorView
           content={lesson.content}
-          interactiveComponents={lesson.interactiveComponents}
+          interactiveComponents={
+            userProgress.state === 'started'
+              ? userProgress.interactiveComponents!
+              : lesson.interactiveComponents
+          }
           lessonId={lessonId}
         />
-        <Group justify="flex-end" pr="15px">
+        <Group justify="flex-end" mt="20px">
           {nextLesson < lessons.length ? (
             <Button
               component={NextLink}
               href={`/courses/${courseId}/lessons/${lessons[nextLesson]?.uid}`}
               rightSection={<IconArrowRight />}
+              size="md"
             >
               Next lesson
             </Button>
@@ -131,6 +137,7 @@ const Page = async ({
               component={NextLink}
               href={`/courses/${courseId}/completed`}
               rightSection={<IconConfetti />}
+              size="md"
             >
               Finish course
             </Button>

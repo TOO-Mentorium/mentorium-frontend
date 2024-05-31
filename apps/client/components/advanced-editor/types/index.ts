@@ -5,6 +5,7 @@ interface InteractiveComponentBase {
 export enum InteractiveComponentType {
   MultipleChoice = 'multipleChoice',
   Task = 'task',
+  Code = 'code',
 }
 
 export interface MultipleChoiceAnswer {
@@ -39,4 +40,22 @@ export interface TaskComponent extends InteractiveComponentBase {
   interactionState: TaskInteractionState
 }
 
-export type InteractiveComponent = MultipleChoiceComponent | TaskComponent
+export interface CodeInteractionState {
+  errors: string[]
+  completed: boolean
+}
+
+export interface CodeComponent extends InteractiveComponentBase {
+  type: InteractiveComponentType.Code
+  state: {
+    initialCode: string
+    language: string
+    tests: string
+  }
+  interactionState: TaskInteractionState
+}
+
+export type InteractiveComponent =
+  | MultipleChoiceComponent
+  | TaskComponent
+  | CodeComponent

@@ -10,6 +10,7 @@ import type {
 import { InteractiveComponentType } from '../../types'
 import { MultipleChoice } from './multiple-choice'
 import { Task } from './task'
+import { CodeEditor } from './code-editor'
 
 type Props = NodeViewProps
 
@@ -71,6 +72,13 @@ const InteractiveComponent = (props: Props) => {
           interactionState: updatedInteractionState,
         },
       })
+
+      if (updatedInteractionState.completed) {
+        handleComplete({
+          ...component,
+          interactionState: updatedInteractionState,
+        })
+      }
     }
 
     return (
@@ -81,6 +89,33 @@ const InteractiveComponent = (props: Props) => {
           onEdit={handleEdit}
           onInteractionStateUpdate={handleInteractionStateUpdate}
         />
+      </NodeViewWrapper>
+    )
+  }
+
+  if (component?.type === InteractiveComponentType.Code) {
+    const handleInteractionStateUpdate = (
+      updatedInteractionState: TaskInteractionState,
+    ) => {
+      setInteractiveComponents({
+        ...interactiveComponents,
+        [component.id]: {
+          ...component,
+          interactionState: updatedInteractionState,
+        },
+      })
+
+      if (updatedInteractionState.completed) {
+        handleComplete({
+          ...component,
+          interactionState: updatedInteractionState,
+        })
+      }
+    }
+
+    return (
+      <NodeViewWrapper>
+        <CodeEditor />
       </NodeViewWrapper>
     )
   }

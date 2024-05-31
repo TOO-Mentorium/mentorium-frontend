@@ -18,9 +18,17 @@ interface Props {
   course: CourseSimplified
   href: string
   withAuthor?: boolean
+  fromStudio?: boolean
 }
 
-export const CourseCard = ({ course, withAuthor = true, href }: Props) => {
+export const CourseCard = ({
+  fromStudio = false,
+  course,
+  withAuthor = true,
+  href,
+}: Props) => {
+  console.log(course)
+
   return (
     <Card
       component={Link}

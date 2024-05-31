@@ -39,7 +39,7 @@ export const Task = ({
     setCompleted(true)
 
     onInteractionStateUpdate?.({
-      completed,
+      completed: true,
     })
   }
 
@@ -47,7 +47,7 @@ export const Task = ({
     setCompleted(false)
 
     onInteractionStateUpdate?.({
-      completed,
+      completed: false,
     })
   }
 
@@ -57,7 +57,11 @@ export const Task = ({
 
   const renderActions = () => {
     if (mode === 'view') {
-      return null
+      return completed ? (
+        <Text c="green.6" fz="xs" m="0">
+          Completed
+        </Text>
+      ) : null
     }
 
     if (mode === 'preview') {
@@ -98,6 +102,7 @@ export const Task = ({
           <Checkbox
             c={state.text ? 'white' : 'dimmed'}
             checked={completed}
+            disabled={completed}
             fz="xs"
             label={
               state.text ? (

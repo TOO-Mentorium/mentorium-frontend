@@ -153,6 +153,7 @@ export const EditLesson = ({
           w="100%"
         >
           <AdvancedEditor
+            editable
             error={Boolean(form.errors.content)}
             mode="preview"
             onChange={({ content, interactiveComponents }) => {

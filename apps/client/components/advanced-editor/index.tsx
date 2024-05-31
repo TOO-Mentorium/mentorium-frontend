@@ -170,9 +170,14 @@ export const AdvancedEditor = ({
     }
   }
 
-  const handleComplete = () => {
+  const handleComplete = (interactiveComponent: InteractiveComponent) => {
+    const updatedComponents = {
+      ...interactiveComponents,
+      [interactiveComponent.id]: interactiveComponent,
+    }
+
     const stringifiedInteractiveComponents = JSON.stringify(
-      interactiveComponents,
+      updatedComponents,
       replacer,
     )
 
@@ -204,7 +209,7 @@ export const AdvancedEditor = ({
         mt="3px"
       >
         {editable ? (
-          <RichTextEditor.Toolbar sticky>
+          <RichTextEditor.Toolbar sticky stickyOffset={70}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
               <RichTextEditor.Italic />
@@ -257,7 +262,7 @@ export const AdvancedEditor = ({
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
         ) : null}
-        <RichTextEditor.Content bg={editable ? 'dark.7' : 'none'} />
+        <RichTextEditor.Content bg="dark.7" p="md" />
       </RichTextEditor>
     </AdvancedEditorContext.Provider>
   )

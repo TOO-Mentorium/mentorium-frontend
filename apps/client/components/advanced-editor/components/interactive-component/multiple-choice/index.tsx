@@ -152,6 +152,7 @@ export const MultipleChoice = ({
             <Checkbox
               c={answer.text ? 'white' : 'dimmed'}
               checked={selectedAnswers.includes(answer.id)}
+              disabled={completed}
               fz="xs"
               key={id}
               label={answer.text ? answer.text : 'Answer placeholder'}

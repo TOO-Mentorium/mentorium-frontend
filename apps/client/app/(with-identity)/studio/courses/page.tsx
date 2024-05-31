@@ -127,6 +127,7 @@ const Page = async ({
               {courses.map((course) => (
                 <CourseCard
                   course={course}
+                  fromStudio
                   href={`/studio/courses/${course.uid}`}
                   key={course.uid}
                   withAuthor={false}

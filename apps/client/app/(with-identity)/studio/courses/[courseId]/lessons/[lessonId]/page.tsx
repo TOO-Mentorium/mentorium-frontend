@@ -26,16 +26,13 @@ export const generateMetadata = async ({
 }
 
 const getLesson = async (lessonId: string) => {
-  const response = await fetch(
-    apiUrl(`/lessons/${lessonId}`),
-    {
-      method: 'GET',
-      headers: {
-        Cookie: cookies().toString(),
-        'Content-Type': 'application/json',
-      },
+  const response = await fetch(apiUrl(`/lessons/${lessonId}`), {
+    method: 'GET',
+    headers: {
+      Cookie: cookies().toString(),
+      'Content-Type': 'application/json',
     },
-  )
+  })
 
   if (!response.ok) {
     if ([404, 500].includes(response.status)) {
@@ -49,16 +46,13 @@ const getLesson = async (lessonId: string) => {
 }
 
 const getCourseLessons = async (courseId: string) => {
-  const response = await fetch(
-    apiUrl(`/courses/preview/${courseId}`),
-    {
-      method: 'GET',
-      headers: {
-        Cookie: cookies().toString(),
-        'Content-Type': 'application/json',
-      },
+  const response = await fetch(apiUrl(`/courses/preview/${courseId}`), {
+    method: 'GET',
+    headers: {
+      Cookie: cookies().toString(),
+      'Content-Type': 'application/json',
     },
-  )
+  })
 
   if (!response.ok) {
     if ([404, 500].includes(response.status)) {
