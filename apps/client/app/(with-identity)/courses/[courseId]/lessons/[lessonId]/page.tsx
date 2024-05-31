@@ -6,6 +6,7 @@ import NextLink from 'next/link'
 import { AdvancedEditor } from '../../../../../../components/advanced-editor'
 import type { Lesson } from '../../../../../../entities/lesson/types'
 import { apiUrl } from '../../../../../../shared/lib'
+import { AdvancedEditorView } from '../../../../../../components/advanced-editor-view'
 
 export const generateMetadata = async ({
   params: { lessonId },
@@ -28,17 +29,19 @@ const getUserProgress = async (lessonId: string) => {
     },
   })
 
+  const data = await response.json()
+
   if (!response.ok) {
-    const data = await response.json()
-
-    console.log(data)
-
-    if ([404, 500].includes(response.status)) {
+    if ([500].includes(response.status)) {
       redirect('/courses')
     }
+
+    return { state: 'not-started' }
   }
 
-  // return data as Lesson
+  console.log(data)
+
+  return { state: 'started' }
 }
 
 const getLesson = async (lessonId: string) => {
@@ -58,9 +61,7 @@ const getLesson = async (lessonId: string) => {
 
   const { data } = await response.json()
 
-  console.log(data)
-
-  return data
+  return data as Lesson
 }
 
 const getCourseLessons = async (courseId: string) => {
@@ -98,7 +99,7 @@ const Page = async ({
 }) => {
   const lesson = await getLesson(lessonId)
   const { lessons } = await getCourseLessons(courseId)
-  await getUserProgress(lessonId)
+  const userProgress = await getUserProgress(lessonId)
 
   const nextLesson = lessons.findIndex((l) => l.uid === lessonId) + 1
 
@@ -111,13 +112,10 @@ const Page = async ({
         </Group>
       </Box>
       <Box mx="auto" w="80%">
-        <AdvancedEditor
-          editable={false}
-          mode="view"
-          value={{
-            content: lesson.content,
-            interactiveComponents: lesson.interactiveComponents,
-          }}
+        <AdvancedEditorView
+          content={lesson.content}
+          interactiveComponents={lesson.interactiveComponents}
+          lessonId={lessonId}
         />
         <Group justify="flex-end" pr="15px">
           {nextLesson < lessons.length ? (

@@ -76,8 +76,8 @@ export const MultipleChoice = ({
       setCompleted(true)
 
       onInteractionStateUpdate?.({
-        selectedAnswers,
-        completed,
+        selectedAnswers: [...selectedAnswers],
+        completed: true,
       })
 
       return
@@ -195,9 +195,15 @@ export const MultipleChoice = ({
         ) : null}
         <Group justify="space-between" w="100%">
           {renderActions()}
-          <Button onClick={handleSubmit} size="xs" variant="light">
-            Submit
-          </Button>
+          {mode === 'view' && interactionState.completed ? (
+            <Text c="green.6" fz="xs" m="0">
+              Completed
+            </Text>
+          ) : (
+            <Button onClick={handleSubmit} size="xs" variant="light">
+              Submit
+            </Button>
+          )}
         </Group>
       </Stack>
     </Paper>

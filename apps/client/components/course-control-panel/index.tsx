@@ -24,16 +24,13 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
   const handleDeleteClick = async () => {
     setDeleting(true)
 
-    const response = await fetch(
-      bffUrl(`/courses?uid=${course.uid}`),
-      {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const response = await fetch(bffUrl(`/courses?uid=${course.uid}`), {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+    })
 
     const data = (await response.json()) as {
       success: boolean
@@ -83,7 +80,6 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
     })
 
     const data = (await response.json()) as {
-      
       success: boolean
       error?: {
         message: string
@@ -92,9 +88,6 @@ export const CourseControlPanel = ({ course }: { course: Course }) => {
     }
 
     if (!data.success) {
-
-
-console.log(data)
       notifications.show({
         title: 'Server error',
         message:

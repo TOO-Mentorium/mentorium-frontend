@@ -9,6 +9,7 @@ export const AdvancedEditorContext = createContext<{
   openConstructor: (component?: InteractiveComponent) => void
   closeConstructor: () => void
   content: JSONContent
+  handleComplete: (component: InteractiveComponent) => void
   interactiveComponents: Record<string, InteractiveComponent>
   setComponentToEdit: (component: InteractiveComponent) => void
   setInteractiveComponents: (
@@ -17,6 +18,7 @@ export const AdvancedEditorContext = createContext<{
   addInteractiveComponent: (component: InteractiveComponent) => void
 }>({
   mode: 'edit',
+  handleComplete: () => {},
   componentToEdit: null,
   constructorOpened: false,
   openConstructor: () => {},

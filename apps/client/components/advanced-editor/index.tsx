@@ -82,6 +82,7 @@ interface Props {
     interactiveComponents: string
   }) => void
   error?: boolean
+  onUpdateProgress: (interactiveComponents: string) => void
   editable?: boolean
 }
 
@@ -90,6 +91,7 @@ export const AdvancedEditor = ({
   mode = 'edit',
   editable = true,
   onChange,
+  onUpdateProgress,
   error,
 }: Props) => {
   const parsedExtenralContent = JSON.parse(value?.content ?? '{}', reviver)
@@ -168,6 +170,15 @@ export const AdvancedEditor = ({
     }
   }
 
+  const handleComplete = () => {
+    const stringifiedInteractiveComponents = JSON.stringify(
+      interactiveComponents,
+      replacer,
+    )
+
+    onUpdateProgress(stringifiedInteractiveComponents)
+  }
+
   return (
     <AdvancedEditorContext.Provider
       value={{
@@ -178,6 +189,7 @@ export const AdvancedEditor = ({
         setInteractiveComponents,
         setComponentToEdit,
         componentToEdit,
+        handleComplete,
         openConstructor: handleConstructorOpen,
         closeConstructor: handleConstructorClose,
         addInteractiveComponent: handleInteractiveComponentAdd,

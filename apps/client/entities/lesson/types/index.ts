@@ -6,6 +6,7 @@ export interface Lesson {
   interactiveComponents: string
   createdDate: string
   updatedDate: string
+  progression: number
 }
 
 export interface LessonSimplified {

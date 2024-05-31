@@ -18,6 +18,7 @@ const InteractiveComponent = (props: Props) => {
     interactiveComponents,
     setInteractiveComponents,
     mode,
+    handleComplete,
     openConstructor,
   } = useContext(AdvancedEditorContext)
 
@@ -38,6 +39,13 @@ const InteractiveComponent = (props: Props) => {
           interactionState: updatedInteractionState,
         },
       })
+
+      if (updatedInteractionState.completed) {
+        handleComplete({
+          ...component,
+          interactionState: updatedInteractionState,
+        })
+      }
     }
 
     return (

@@ -25,8 +25,8 @@ import { IconExclamationMark, IconX } from '@tabler/icons-react'
 import NextImage from 'next/image'
 import { SimpleTextEditor } from '../../components/simple-text-editor'
 import type { Course } from '../../entities/course'
-import classNames from './index.module.css'
 import { bffUrl } from '../../shared/lib'
+import classNames from './index.module.css'
 
 export const CreateCourse = () => {
   const router = useRouter()
@@ -161,8 +161,6 @@ export const CreateCourse = () => {
     const formData = new FormData()
 
     formData.append('file', files[0] as Blob)
-
-    console.log(formData.get('file'))
 
     const response = await fetch(bffUrl('/storage/upload'), {
       method: 'POST',

@@ -34,8 +34,6 @@ export default async (req: NextRequest) => {
   //     },
   //   })
 
-  //   console.log(await response.json())
-
   //   if (!response.ok) {
   //     return NextResponse.redirect(new URL('/login', req.nextUrl))
   //   }

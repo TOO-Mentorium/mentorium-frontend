@@ -87,8 +87,6 @@ export const DELETE = async (req: NextRequest) => {
   if (!response.ok) {
     const error = await response.json()
 
-    console.log(error)
-
     if (error.statusCode === 401) {
       return NextResponse.redirect('/login')
     }
@@ -101,8 +99,6 @@ export const DELETE = async (req: NextRequest) => {
       },
     })
   }
-
-  console.log(await response.json())
 
   return NextResponse.json({
     success: true,

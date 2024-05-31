@@ -30,21 +30,14 @@ const Page = () => {
       username: formData.get('username'),
     }
 
-    const response = await fetch(
-      apiUrl('/auth/register'),
-      {
-        method: 'POST',
-        body: JSON.stringify(rawFormData),
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const response = await fetch(apiUrl('/auth/register'), {
+      method: 'POST',
+      body: JSON.stringify(rawFormData),
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
-
-    if (!response.ok) {
-      console.log(await response.json())
-    }
+    })
 
     const data = await response.json()
   }

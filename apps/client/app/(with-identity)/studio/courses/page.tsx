@@ -19,8 +19,8 @@ import type { CourseSimplifiedWithPublished } from '../../../../entities/course'
 import { CourseCard } from '../../../../entities/course'
 import { SearchInput } from '../../../../components/search-input'
 import { CoursesSort } from '../../../../components'
-import classNames from './page.module.css'
 import { apiUrl } from '../../../../shared/lib'
+import classNames from './page.module.css'
 
 export const metadata = {
   title: 'Studio | Mentorium',
@@ -31,10 +31,10 @@ const getCourses = async (
   sortBy: string,
   direction: string,
 ) => {
-  console.log(searchQuery, '123')
-
   const response = await fetch(
-    apiUrl(`/courses/my?search=${searchQuery}&sortBy=${sortBy}&direction=${direction}`),
+    apiUrl(
+      `/courses/my?search=${searchQuery}&sortBy=${sortBy}&direction=${direction}`,
+    ),
     {
       headers: {
         Cookie: cookies().toString(),
@@ -61,8 +61,6 @@ const getCourses = async (
   }
 
   const { data, total } = await response.json()
-
-  console.log(data, response.url)
 
   return { courses: data, total } as {
     courses: CourseSimplifiedWithPublished[]

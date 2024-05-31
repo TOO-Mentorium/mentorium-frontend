@@ -49,8 +49,6 @@ export const SimpleEditorView = ({
 }) => {
   const formattedJson = JSON.parse(stringifiedJson)
 
-  console.log(formattedJson)
-
   const output = useMemo(() => {
     return generateHTML(formattedJson, extensions as Extension[])
   }, [formattedJson])

@@ -1,19 +1,17 @@
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { apiUrl } from '../../../../shared/lib'
 
 export const POST = async (req: NextRequest) => {
-  const body = await req.formData()
+  const body = await req.json()
 
-  console.log(body.get('file'))
-
-  const response = await fetch(apiUrl('/courses/upload'), {
+  const response = await fetch(apiUrl('/lessons/progression'), {
     method: 'POST',
-    body,
+    body: JSON.stringify(body),
     headers: {
       Cookie: cookies().toString(),
+      'Content-Type': 'application/json',
     },
   })
 
@@ -33,12 +31,7 @@ export const POST = async (req: NextRequest) => {
     })
   }
 
-  const { data } = await response.json()
-
-  console.log(data.Location)
-
   return NextResponse.json({
     success: true,
-    fileUrl: data.Location,
   })
 }

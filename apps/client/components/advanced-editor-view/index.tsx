@@ -1,59 +1,70 @@
 'use client'
 
-import { useMemo } from 'react'
-import type { Extension } from '@tiptap/core'
-import { generateHTML } from '@tiptap/core'
-import { createLowlight } from 'lowlight'
-import ts from 'highlight.js/lib/languages/typescript'
-import js from 'highlight.js/lib/languages/javascript'
-import Placeholder from '@tiptap/extension-placeholder'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import Image from '@tiptap/extension-image'
-import Highlight from '@tiptap/extension-highlight'
-import { Link } from '@mantine/tiptap'
-import InteractiveComponentExtension from '../advanced-editor/components/interactive-component/extension'
-
-const lowlight = createLowlight()
-
-lowlight.register({ js, ts })
-
-const extensions = [
-  InteractiveComponentExtension,
-  Image,
-  Placeholder.configure({ placeholder: "Let's start" }),
-  StarterKit.configure({
-    bulletList: {
-      keepMarks: true,
-      keepAttributes: false,
-    },
-    orderedList: {
-      keepMarks: true,
-      keepAttributes: false,
-    },
-  }),
-  Highlight,
-  Underline,
-  Link,
-  CodeBlockLowlight.configure({
-    lowlight,
-    defaultLanguage: 'js',
-  }),
-]
+import { notifications } from '@mantine/notifications'
+import { IconExclamationMark } from '@tabler/icons-react'
+import { bffUrl } from '../../shared/lib'
+import { AdvancedEditor } from '../advanced-editor'
 
 export const AdvancedEditorView = ({
-  stringifiedJson,
+  content,
+  lessonId,
+  interactiveComponents,
 }: {
-  stringifiedJson: string
+  content: string
+  interactiveComponents: string
+  lessonId: string
 }) => {
-  const formattedJson = JSON.parse(stringifiedJson)
+  const handleUpdateProgress = async (updatedInteractiveComponents: string) => {
+    const response = await fetch(bffUrl('/lessons/progression'), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        lessonUid: lessonId,
+        interactiveComponents: updatedInteractiveComponents,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-  console.log(formattedJson)
+    const data = (await response.json()) as {
+      success: boolean
+      error?: {
+        message: string
+        code: number
+      }
+    }
 
-  const output = useMemo(() => {
-    return generateHTML(formattedJson, extensions as Extension[])
-  }, [formattedJson])
+    if (!data.success) {
+      notifications.show({
+        title: 'Server error',
+        message:
+          'An unexpected error occurred while editing lesson. Please try again later.',
+        color: 'red',
+        autoClose: 5000,
+        icon: <IconExclamationMark size="20px" />,
+      })
+    }
 
-  return <div dangerouslySetInnerHTML={{ __html: output }} />
+    if (data.success) {
+      notifications.show({
+        title: 'Congratulations!',
+        message: 'Task completed. Your progress has been saved.',
+        color: 'blue',
+        autoClose: 5000,
+      })
+    }
+  }
+
+  return (
+    <AdvancedEditor
+      editable={false}
+      mode="view"
+      onUpdateProgress={handleUpdateProgress}
+      value={{
+        content,
+        interactiveComponents,
+      }}
+    />
+  )
 }

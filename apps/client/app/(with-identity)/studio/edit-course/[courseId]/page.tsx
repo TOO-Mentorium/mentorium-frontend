@@ -11,21 +11,16 @@ export const metadata = {
 }
 
 const getCourse = async (courseId: string) => {
-  const response = await fetch(
-    apiUrl(`/courses/preview/${courseId}`),
-    {
-      method: 'GET',
-      headers: {
-        Cookie: cookies().toString(),
-        'Content-Type': 'application/json',
-      },
+  const response = await fetch(apiUrl(`/courses/preview/${courseId}`), {
+    method: 'GET',
+    headers: {
+      Cookie: cookies().toString(),
+      'Content-Type': 'application/json',
     },
-  )
+  })
 
   if (!response.ok) {
     const error = await response.json()
-
-    console.log(error)
 
     if ([404, 500].includes(response.status)) {
       redirect('/studio/courses')
