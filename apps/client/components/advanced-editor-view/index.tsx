@@ -14,8 +14,6 @@ export const AdvancedEditorView = ({
   interactiveComponents: string
   lessonId: string
 }) => {
-  console.log(interactiveComponents)
-
   const handleUpdateProgress = async (updatedInteractiveComponents: string) => {
     const response = await fetch(bffUrl('/lessons/progression'), {
       method: 'POST',

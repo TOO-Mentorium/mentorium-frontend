@@ -27,8 +27,6 @@ export const CourseCard = ({
   withAuthor = true,
   href,
 }: Props) => {
-  console.log(course)
-
   return (
     <Card
       component={Link}
